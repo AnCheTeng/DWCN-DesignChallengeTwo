@@ -1,0 +1,7 @@
+--cpu Cortex-M0
+".\objects\main.o"
+".\Listings\AutoNet.lib"
+--strict --scatter ".\Objects\AutoNet.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\AutoNet.map" -o .\Objects\AutoNet.axf
