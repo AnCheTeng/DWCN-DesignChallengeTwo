@@ -5,7 +5,7 @@
 #include "autonet.h"
 
 #define TABLE_LENGTH 24
-#define Device_ID 0x0801
+#define Device_ID 0x0809
 
 void DesignChallengeOneProtocol(void);
 void lightLED(uint8_t);
@@ -171,8 +171,14 @@ void DesignChallengeOneProtocol(void){
 		if(payload[21]==8){
 			// When waiting for Reset/Alert, filter out unrelated packet
 			if(Warning_State==0 && payload[22]!=0){
+				for(i=0; i<TABLE_LENGTH; i++){
+					payload[i]=0;
+				}
 				continue;
 			}else if(Warning_State==1 && payload[22]!=2){
+				for(i=0; i<TABLE_LENGTH; i++){
+					payload[i]=0;
+				}
 				continue;
 			}
 			Table[21]=8;
@@ -237,6 +243,9 @@ void DesignChallengeOneProtocol(void){
 			// State-1: Process after the limited Table is full
 
 			if(ID==7){
+				//if(Table[21]==0){
+				//	continue;
+				//}
 				RF_Tx(0xffff,Table,Tx_length);
 				lightLED(ID);
 				// Remaining: broadcast confirmation message
@@ -260,6 +269,7 @@ void DesignChallengeOneProtocol(void){
 				RF_Tx(0xffff,Table,Tx_length);
 				for(i=0; i<TABLE_LENGTH; i++){
 					Table[i]=0;
+					payload[i]=0;
 				}
 				
 				// Initiate the Table
@@ -319,6 +329,7 @@ void DesignChallengeOneProtocol(void){
           RF_Tx(0xffff,Table,Tx_length);
           for(i=0; i<TABLE_LENGTH; i++){
             Table[i]=0;
+						payload[i]=0;
           }
 
           // Initiate the Table
